@@ -20,6 +20,8 @@
   function generateTableHead(table, data) {
     let thead = table.createTHead();
     let row = thead.insertRow();
+    let th = document.createElement("th");
+    row.appendChild(th);
     for (let key of data) {
       let th = document.createElement("th");
       let text = document.createTextNode(key);
@@ -34,7 +36,17 @@
       let element = data[i];
       console.log(element);
       let row = table.insertRow();
+      let toggleBtn = row.insertCell();
+      let sign = '-';
+      
+      toggleBtn.appendChild(document.createTextNode(sign))
       for (key in element) {
+        if (key ==="Children"){
+          let hiddenRow = table.insertRow();
+          hiddenRow.appendChild(document.createTextNode(element[key]));
+          
+          continue
+        }
         let cell = row.insertCell();
         let text = document.createTextNode(element[key]);
         cell.appendChild(text);
@@ -119,7 +131,6 @@
 
 <script>
 // Testcases
-// Format by robert
 let originData = {
 	fields : [{ label : "Name", field : "Title" }, { label : "Modified", field : "Modified" }],
 	data : [{ Title : "ABC", Modified : new Date(),
@@ -130,7 +141,7 @@ let originData = {
 let noChildData = {
 	fields : [{ label : "Name", field : "Title" }, { label : "Modified", field : "Modified" }],
 	data :
-	  [ { Title : "OdioCurabitur.xls", Modified : 'Jan 26'},
+	  [ { Title : "OdioCurabitur.xls", Modified : 'Jan 26', Children:"hidden"},
       { Title : "Elit.tiff", Modified : 'Jan 27'},
       { Title : "VolutpatConvallis.avi", Modified : 'Jan 28'},
       { Title : "Magnis.mp3", Modified : 'Jan 26'},
