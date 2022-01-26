@@ -68,7 +68,6 @@ class TaskCard extends HTMLElement {
     const toggleBtn = this.shadowRoot.querySelector('#status-info');
     // modification
     if (this.finish) {
-
       toggleBtn.innerText = 'Done';
       toggleBtn.style.background = 'green';
     } else {

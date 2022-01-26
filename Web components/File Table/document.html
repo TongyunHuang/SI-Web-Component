@@ -1,0 +1,135 @@
+
+<body>
+<script>
+
+($ =>
+{
+  const template = document.createElement('template');
+  // HTML of the shadowDom
+  template.innerHTML = `
+  <style>
+  table, th, td {
+    border:1px solid black;
+  }
+  </style>
+  <table style="width:100%">
+  </table>
+  `;
+
+  /** helper functions: use func defined in HTMLTableElement */
+  /* Generate table header by header data size */
+  function generateTableHead(table, data) {
+    let thead = table.createTHead();
+    let row = thead.insertRow();
+    for (let key of data) {
+      let th = document.createElement("th");
+      let text = document.createTextNode(key);
+      th.appendChild(text);
+      row.appendChild(th);
+    }
+  }
+  /* Generate table row by data size */
+  function generateTable(table, data) {
+    for (let element of data) {
+      let row = table.insertRow();
+      for (key in element) {
+        let cell = row.insertCell();
+        let text = document.createTextNode(element[key]);
+        cell.appendChild(text);
+      }
+    }
+  }
+
+  /* Row onCLick Handler */
+  function addRowHandlers(table) {
+    let rows = table.getElementsByTagName("tr");
+    for (let i = 1; i < rows.length; i++) {
+      row = table.rows[i];
+      row.onclick = function(){
+                          var cell = this.getElementsByTagName("td")[0];
+                          var id = i;
+                          alert("id:" + id);
+                      };
+    }
+  }
+
+  /* Table creation starts here */
+  function createTable(table, data) {
+    // TODO: parse Robert's data format
+    // Get header from data obj
+    let fieldsData = data['fields'];
+    const header = []
+    for (let i = 0; i < fieldsData.length; i++) {
+      header.push(fieldsData[i]['label'])
+    }
+    generateTableHead(table, header);
+    let tableData = data['data']
+    console.log(tableData);
+    generateTable(table, data);
+    addRowHandlers(table);
+  }
+  
+	customElements.define('input-directory', 
+  class extends HTMLElement
+	{
+    constructor()
+		{
+			super();
+      this._source = undefined;
+			this.shadow = this.attachShadow({ mode: 'closed' });
+      //this.source = JSON.stringify(source);
+      this.shadow.appendChild(template.content.cloneNode(true));
+      
+		}
+
+    static get observedAttributes(){
+      return ['source']
+    }
+
+    attributeChangedCallback(attrName, oldVal, newVal) {
+      console.log(attrName);
+      if (oldVal != newVal) {
+        let data = JSON.parse(newVal);
+        let table = this.shadow.querySelector("table");
+        createTable(table, data);
+      }
+    }
+
+		set source(source) {
+			this.setAttribute('source', JSON.stringify(source));
+      console.log(this.getAttribute('source'));
+		}
+    
+    get source() {
+      return this.getAttribute('source');
+    }
+	}
+  );
+})();
+
+</script>
+
+<script>
+// Testcases
+// Format by robert
+let originData = {
+	fields : [{ label : "Name", field : "Title" }, { label : "Modified", field : "Modified" }],
+	data : [{ Title : "ABC", Modified : new Date(),
+		          Children : [{ Title : "DEF", Modified : new Date() }]},
+            ],
+};
+
+let noChildData = {
+	fields : [{ label : "Name", field : "Title" }, { label : "Modified", field : "Modified" }],
+	data :
+	  [ { Title : "ABC", Modified : 'Jan 26'},
+      { Title : "BCD", Modified : 'Jan 27'},
+      { Title : "CDE", Modified : 'Jan 28'}
+    ],
+};
+
+// Call the customized table component and pass in data here
+document.body.appendChild(document.createElement("input-directory")).source = noChildData;
+
+</script>
+</body>
