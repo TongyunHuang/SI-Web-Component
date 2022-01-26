@@ -8,10 +8,9 @@
   // HTML of the shadowDom
   template.innerHTML = `
   <style>
-  table, th, td {
-    border:1px solid black;
-  }
+  
   </style>
+  <link rel="stylesheet" href="styles.css">
   <table style="width:100%">
   </table>
   `;
@@ -30,7 +29,10 @@
   }
   /* Generate table row by data size */
   function generateTable(table, data) {
-    for (let element of data) {
+    console.log(data.length);
+    for (let i=0; i < data.length; i++) {
+      let element = data[i];
+      console.log(element);
       let row = table.insertRow();
       for (key in element) {
         let cell = row.insertCell();
@@ -55,7 +57,6 @@
 
   /* Table creation starts here */
   function createTable(table, data) {
-    // TODO: parse Robert's data format
     // Get header from data obj
     let fieldsData = data['fields'];
     const header = []
@@ -63,9 +64,10 @@
       header.push(fieldsData[i]['label'])
     }
     generateTableHead(table, header);
+    // Get data for table content
     let tableData = data['data']
-    console.log(tableData);
-    generateTable(table, data);
+    let tableKey = Object.keys(tableData[0])
+    generateTable(table, tableData);
     addRowHandlers(table);
   }
   
@@ -79,6 +81,12 @@
 			this.shadow = this.attachShadow({ mode: 'closed' });
       //this.source = JSON.stringify(source);
       this.shadow.appendChild(template.content.cloneNode(true));
+      // add external css file as styling
+      (() => {
+            let link = this.shadow.appendChild(document.createElement('link'));
+            link.rel = 'stylesheet';
+            link.href = `styles.css`;
+      })();
       
 		}
 
@@ -122,9 +130,12 @@ let originData = {
 let noChildData = {
 	fields : [{ label : "Name", field : "Title" }, { label : "Modified", field : "Modified" }],
 	data :
-	  [ { Title : "ABC", Modified : 'Jan 26'},
-      { Title : "BCD", Modified : 'Jan 27'},
-      { Title : "CDE", Modified : 'Jan 28'}
+	  [ { Title : "OdioCurabitur.xls", Modified : 'Jan 26'},
+      { Title : "Elit.tiff", Modified : 'Jan 27'},
+      { Title : "VolutpatConvallis.avi", Modified : 'Jan 28'},
+      { Title : "Magnis.mp3", Modified : 'Jan 26'},
+      { Title : "Ut.xls", Modified : 'Jan 27'},
+      { Title : "DuisFaucibus.xls", Modified : 'Jan 28'}
     ],
 };
 
