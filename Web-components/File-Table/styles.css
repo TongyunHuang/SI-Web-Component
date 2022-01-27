@@ -17,6 +17,7 @@ table {
   min-width: 100%;
   border-collapse: collapse;
   display:table;
+  font-family: "Segoe UI", system-ui, "Apple Color Emoji", "Segoe UI Emoji", sans-serif;;
 }
 
 tr{
@@ -35,12 +36,11 @@ tr:hover {
 th {
   color: #ffffff;
   background: #6c7ae0;
-  font-family: Poppins-Regular;
   font-size: 18px;
   text-align: left;
   color: #fff;
   line-height: 1.2;
-  font-weight: unset important;
+  font-weight: unset !important;
   padding-left: 30px;
   padding-top: 19px;
   padding-bottom: 19px;
