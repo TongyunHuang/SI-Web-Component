@@ -72,7 +72,7 @@ function addRowHandlers(table, data, oldBody) {
                         var cell = this.getElementsByTagName("tr")[i];
                         var id = i;
 
-                        alert("id:" + id);
+                        //alert("id:" + id);
                         // pathAppend(pathBar, 'ranName')
                         //TODO: onclick change table content
                         let newData = data[i-1]['Children'];

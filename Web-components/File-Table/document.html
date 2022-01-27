@@ -9,7 +9,9 @@
   // HTML of the shadowDom
   template.innerHTML = `
   <div style="display:flex">
-    <p>myFolder</p>
+    <p>root > </p>
+    <p> > </p>
+    <p> myFolder</p>
   </div>
   <table></table>
   `;
@@ -83,19 +85,19 @@ let noChildData = {
 };
 
 let haveChild = {
-	fields : [{ label : "Name", field : "Title" }, { label : "Modified", field : "Modified" }],
+	fields : [{ label : "Name", field : "Title" }, { label : "Modified", field : "Modified" }, { label : "Modified by", field : "People" }],
 	data :
-	  [ { Title : "sub-folder", Modified : 'Jan 26', 
+	  [ { Title : "sub-folder", Modified : 'Jan 26', People:'Bob',
         Children:[
-          { Title : "subFile1.ppt", Modified : 'Jan 27'},
-          { Title : "subFile2.docs", Modified : 'Jan 28'}
+          { Title : "subFile1.ppt", Modified : 'Jan 27', People:'Bob'},
+          { Title : "subFile2.docs", Modified : 'Jan 28', People:'Bob'}
         ]
       },
-      { Title : "Elit.tiff", Modified : 'Jan 27'},
-      { Title : "VolutpatConvallis.avi", Modified : 'Jan 28'},
-      { Title : "Magnis.mp3", Modified : 'Jan 26'},
-      { Title : "Ut.xls", Modified : 'Jan 27'},
-      { Title : "DuisFaucibus.xls", Modified : 'Jan 28'}
+      { Title : "Elit.tiff", Modified : 'Jan 27', People:'Bob'},
+      { Title : "VolutpatConvallis.avi", Modified : 'Jan 28', People:'Bob'},
+      { Title : "Magnis.mp3", Modified : 'Jan 26', People:'Bob'},
+      { Title : "Ut.xls", Modified : 'Jan 27', People:'Bob'},
+      { Title : "DuisFaucibus.xls", Modified : 'Jan 28', People:'Bob'}
     ],
 };
 
