@@ -1,4 +1,53 @@
-/** helper functions: use func defined in HTMLTableElement */
+
+/** Initialize directory bar, called by document.html */
+function createPathBar(pathBar, rootDir, rootData, table){
+  let curDir = document.createElement("p");
+  curDir.appendChild(document.createTextNode(rootDir));
+  curDir.className = "dir last-dir";
+  curDir.onclick = function(){
+    // regenerate table using dirData
+    
+    let tableData = rootData['data']
+    let tableKey = Object.keys(tableData[0])
+    let newData = [...tableData];
+    let newBody = generateTable(table, newData);
+    let old = table.childNodes[1];
+    table.removeChild(old)
+    table.appendChild(newBody)
+    // if curDIr style does not contain last-dir, remove last two p in bar
+  }
+  pathBar.appendChild(curDir);
+}
+
+/** change directory path when folder choosen */
+function pathAppend(pathBar, dirName, dirData, table){
+  // remove parent dir bold style
+  let nodeCnt = pathBar.childNodes.length;
+  pathBar.childNodes[nodeCnt-1].className = "dir";
+  // add divider
+  let divider = document.createElement("p");
+  divider.appendChild(document.createTextNode(">>"));
+  divider.className = "dir";
+  pathBar.appendChild(divider);
+  // add new path name
+  let curDir = document.createElement("p");
+  let curText = document.createTextNode(dirName);
+  curDir.appendChild(curText);
+  curDir.className = "dir last-dir";
+  // add new path onclick
+  curDir.onclick = function(){
+    // regenerate table using dirData
+    let newData = dirData;
+    let newBody = generateTable(table, newData);
+    let old = table.childNodes[1];
+    table.removeChild(old)
+    table.appendChild(newBody)
+    // if curDIr style does not contain last-dir, remove last two p in bar
+  }
+  pathBar.appendChild(curDir);
+}
+
+
 /* Generate table header by header data size */
 function generateTableHead(table, data) {
   let thead = table.createTHead();
@@ -33,15 +82,11 @@ function generateTable(table, data) {
     // add file/folder icon per row
     let imgCell = row.insertCell();
     let img = document.createElement('img');
-    img.src = 'https://img.icons8.com/material-outlined/30/000000/file.png';
+    img.src = 'https://img.icons8.com/material-outlined/30/000000/file.png'; // hardcode for now
     imgCell.appendChild(img);
 
     for (key in element) {
-      if (key ==="Children"){
-        // let hiddenRow = table.insertRow();
-        // hiddenRow.appendChild(document.createTextNode(element[key]));
-        continue;
-      }
+      if (key ==="Children") continue;
       let cell = row.insertCell();
       // console.log(element[key])
       let text = document.createTextNode(element[key]);
@@ -51,41 +96,32 @@ function generateTable(table, data) {
   return tbody;
 }
 
-/** Path bar */
-function pathAppend(navBar, folderName) {
-  let innerDiv0 = document.createElement('div');
-  // The variable iDiv is still good... Just append to it.
-  innerDiv0.appendChild(createTextNode('/'))
-  navBar.appendChild(innerDiv0);
-  let innerDiv = document.createElement('div');
-  // The variable iDiv is still good... Just append to it.
-  innerDiv.appendChild(createTextNode(folderName))
-  navBar.appendChild(innerDiv);
-}
-
 /* Row onCLick Handler */
-function addRowHandlers(table, data, oldBody) {
+function addRowHandlers(table,dirBar, data) {
   let rows = table.getElementsByTagName("tr");
   for (let i = 1; i < rows.length; i++) {
     row = table.rows[i];
-    row.onclick = function(){
-                        var cell = this.getElementsByTagName("tr")[i];
-                        var id = i;
-
-                        //alert("id:" + id);
-                        // pathAppend(pathBar, 'ranName')
-                        //TODO: onclick change table content
-                        let newData = data[i-1]['Children'];
-                        console.log(newData);
-                        
-                        let newBody = generateTable(table, newData);
-                        table.replaceChild(newBody, oldBody)
-                    };
+    let titleCell = row.getElementsByTagName("td")[2]
+    titleCell.onclick = function(){
+      
+      // onclick replace table content
+      try{
+        let newData = data[i-1]['Children'];
+        let newBody = generateTable(table, newData);
+        // onclick change path directory
+        pathAppend(dirBar, data[i-1]['Title'], newData, table);
+        let old = table.childNodes[1];
+        table.removeChild(old)
+        table.appendChild(newBody)
+      } catch (e) {
+        alert('Not a folder');
+      }
+    };
   }
 }
 
 /* Table creation starts here */
-function createTable( table, data) {
+function createTable(table, dirBar, data) {
   // Get header from data obj
   let fieldsData = data['fields'];
   const header = []
@@ -98,5 +134,5 @@ function createTable( table, data) {
   let tableKey = Object.keys(tableData[0])
   let newBody = generateTable(table, tableData);
   table.appendChild(newBody);
-  addRowHandlers(table, tableData, newBody);
+  addRowHandlers(table, dirBar, tableData);
 }

@@ -1,6 +1,7 @@
 
 <body>
 <script type="text/javascript" src="tableUtils.js" ></script>
+<!-- <script type="text/javascript" src="dirBar.js" ></script> -->
 <script>
 
 ($ =>
@@ -8,10 +9,7 @@
   const template = document.createElement('template');
   // HTML of the shadowDom
   template.innerHTML = `
-  <div style="display:flex">
-    <p>root > </p>
-    <p> > </p>
-    <p> myFolder</p>
+  <div style="display:flex" class="directory-bar">
   </div>
   <table></table>
   `;
@@ -19,22 +17,16 @@
 	customElements.define('input-directory', 
   class extends HTMLElement
 	{
-    constructor()
-		{
+    constructor() {
 			super();
-      this._source = undefined;
 			this.shadow = this.attachShadow({ mode: 'closed' });
-      //this.source = JSON.stringify(source);
       this.shadow.appendChild(template.content.cloneNode(true));
-      //test out
-      
       // add external css file as styling
       (() => {
             let link = this.shadow.appendChild(document.createElement('link'));
             link.rel = 'stylesheet';
             link.href = `styles.css`;
       })();
-      
 		}
 
     static get observedAttributes(){
@@ -45,8 +37,10 @@
       if (oldVal != newVal) {
         let data = JSON.parse(newVal);
         let table = this.shadow.querySelector("table");
-        let pathBar = this.shadow.querySelector("div");
-        createTable( table, data);
+        let dirBar = this.shadow.querySelector("div");
+        // TODO: pass pathBar
+        createPathBar(dirBar, "Documents", data, table);
+        createTable( table, dirBar, data);
       }
     }
 
@@ -96,8 +90,23 @@ let haveChild = {
       { Title : "Elit.tiff", Modified : 'Jan 27', People:'Bob'},
       { Title : "VolutpatConvallis.avi", Modified : 'Jan 28', People:'Bob'},
       { Title : "Magnis.mp3", Modified : 'Jan 26', People:'Bob'},
+      /*{ Title : "Ut.xls", Modified : 'Jan 27', People:'Bob'},
+      { Title : "DuisFaucibus.xls", Modified : 'Jan 28', People:'Bob'},
+      { Title : "Elit.tiff", Modified : 'Jan 27', People:'Bob'},
+      { Title : "VolutpatConvallis.avi", Modified : 'Jan 28', People:'Bob'},
+      { Title : "Magnis.mp3", Modified : 'Jan 26', People:'Bob'},
       { Title : "Ut.xls", Modified : 'Jan 27', People:'Bob'},
-      { Title : "DuisFaucibus.xls", Modified : 'Jan 28', People:'Bob'}
+      { Title : "DuisFaucibus.xls", Modified : 'Jan 28', People:'Bob'},
+      { Title : "Elit.tiff", Modified : 'Jan 27', People:'Bob'},
+      { Title : "VolutpatConvallis.avi", Modified : 'Jan 28', People:'Bob'},
+      { Title : "Magnis.mp3", Modified : 'Jan 26', People:'Bob'},
+      { Title : "Ut.xls", Modified : 'Jan 27', People:'Bob'},
+      { Title : "DuisFaucibus.xls", Modified : 'Jan 28', People:'Bob'},
+      { Title : "Elit.tiff", Modified : 'Jan 27', People:'Bob'},
+      { Title : "VolutpatConvallis.avi", Modified : 'Jan 28', People:'Bob'},
+      { Title : "Magnis.mp3", Modified : 'Jan 26', People:'Bob'},
+      { Title : "Ut.xls", Modified : 'Jan 27', People:'Bob'},
+      { Title : "DuisFaucibus.xls", Modified : 'Jan 28', People:'Bob'}*/
     ],
 };
 

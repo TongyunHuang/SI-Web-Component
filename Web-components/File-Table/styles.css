@@ -17,7 +17,7 @@ table {
   min-width: 100%;
   border-collapse: collapse;
   display:table;
-  font-family: "Segoe UI", system-ui, "Apple Color Emoji", "Segoe UI Emoji", sans-serif;;
+  font-family: "Segoe UI", system-ui, "Apple Color Emoji", "Segoe UI Emoji", sans-serif;
 }
 
 tr{
@@ -35,6 +35,8 @@ tr:hover {
 
 th {
   color: #ffffff;
+  position: sticky;
+  top: 0;
   background: #6c7ae0;
   font-size: 18px;
   text-align: left;
@@ -58,4 +60,22 @@ td {
     padding-bottom: 16px;
 }
 
+.directory-bar{
+  padding: 5 10;
+  width:100%;
+  position: sticky;
+  top: 1;
+}
+
+.dir{
+  font-family: "Segoe UI", system-ui, "Apple Color Emoji", "Segoe UI Emoji", sans-serif;
+  font-size:x-large;
+  padding: 5 5;
+}
+.last-dir{
+  /* font-family: "Segoe UI", system-ui, "Apple Color Emoji", "Segoe UI Emoji", sans-serif;
+  font-size:x-large;
+  padding: 5 5; */
+  font-weight: bold;
+}
 
